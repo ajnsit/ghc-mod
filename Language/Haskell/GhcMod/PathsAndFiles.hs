@@ -162,7 +162,10 @@ getStackDbList = do
     Just stack -> do
       snapshotDb <- readProcess stack ["path", "--snapshot-pkg-db"] ""
       localDb <- readProcess stack ["path", "--local-pkg-db"] ""
-      return [PackageDb snapshotDb, PackageDb localDb]
+      return (map (PackageDb . stripNewlines) [snapshotDb, localDb])
+  where
+      stripNewlines = filter (/= '\n')
+
 
 -- | Get path to sandbox config file
 getSandboxDb :: FilePath -- ^ Path to the cabal package root directory
