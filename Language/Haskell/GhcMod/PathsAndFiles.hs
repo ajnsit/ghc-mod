@@ -164,7 +164,7 @@ getStackDbList = do
       localDb <- readProcess stack ["path", "--local-pkg-db"] ""
       return (map (PackageDb . stripNewlines) [snapshotDb, localDb])
   where
-      stripNewlines = filter (/= '\n')
+      stripNewlines = reverse . dropWhile (=='\n') . reverse
 
 
 -- | Get path to sandbox config file
